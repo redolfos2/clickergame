@@ -1,0 +1,358 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #1f1f1f;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body.dark {
+  background-color: #111;
+  color: #eee;
+}
+
+body.dark p,
+body.dark h2,
+body.dark h3 {
+  color: #fff;
+}
+
+.game {
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  min-height: 100vh;
+}
+
+.menu {
+  position: relative;
+  width: 100%;
+  padding: 1rem;
+}
+
+.menu p {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.shop {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  z-index: 10;
+}
+
+.settings {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  z-index: 10;
+}
+
+.autoc {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  z-index: 10;
+}
+
+.menu button,
+.autoc,
+.settings,
+.modal-btn {
+  background: #e4e4e400;
+  padding: 0.5rem;
+  border: 1px solid #444;
+  border-radius: 10px;
+  color: #1f1f1f;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-in-out;
+  outline: 2px solid transparent;
+  outline-offset: 8px;
+}
+
+body.dark .menu button,
+body.dark .autoc,
+body.dark .settings,
+body.dark .modal-btn {
+  color: #eee;
+}
+
+.menu button:hover,
+.autoc:hover,
+.settings:hover,
+.modal-btn:hover {
+  background: #c7c7c7;
+  outline: 2px solid #444;
+  outline-offset: 2px;
+}
+
+body.dark .menu button:hover,
+body.dark .autoc:hover,
+body.dark .settings:hover,
+body.dark .modal-btn:hover {
+  background: #555;
+}
+
+.menu button:active,
+.autoc:active,
+.settings:active,
+.modal-btn:active {
+  outline-offset: 4px;
+}
+
+.menu button.clicked,
+.autoc.clicked,
+.settings.clicked,
+.modal-btn.clicked {
+  transform: scale(0.9);
+  background: #ffeb3b;
+}
+
+.clicker {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  perspective: 500px;
+  width: 150px;
+  height: 150px;
+  z-index: 5;
+}
+
+.clicker button {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  font-size: 24px;
+  border: none;
+  background: radial-gradient(circle at var(--gradient-x, 50%) var(--gradient-y, 50%), rgba(255,255,255,0.8) 0%, rgba(255,215,0,0.7) 30%, #ffcc00 70%);
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3), var(--shadow-active, 0 0 0 transparent);
+  overflow: hidden;
+}
+
+.clicker button::after {
+  content: '';
+  position: absolute;
+  top: var(--highlight-y, 30px);
+  left: var(--highlight-x, 30px);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  filter: blur(12px);
+  opacity: 0.8;
+  transition: top 0.3s ease, left 0.3s ease, opacity 0.3s ease;
+}
+
+.clicker button:active,
+.clicker button.clicked {
+  transform: scale(0.95) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  --shadow-active: 0 5px 15px rgba(0,0,0,0.5);
+  background: radial-gradient(circle at var(--gradient-x, 50%) var(--gradient-y, 50%), rgba(255,255,255,0.9) 0%, rgba(255,215,0,0.9) 30%, #ffd700 70%);
+}
+
+/* Modal windows */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal.modal-open {
+  opacity: 1;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+.modal.modal-open .modal-content {
+  transform: scale(1);
+}
+
+body.dark .modal-content {
+  background-color: #222;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #1f1f1f;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+body.dark .modal-close {
+  color: #eee;
+}
+
+.modal-close:hover {
+  color: #ff4444;
+}
+
+.modal-section {
+  margin-bottom: 1.5rem;
+}
+
+.modal-section h3 {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+.modal-btn {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.close-btn {
+  background-color: #ff4444;
+  color: #fff;
+  border: none;
+}
+
+.close-btn:hover {
+  background-color: #cc3333;
+  outline: none;
+}
+
+/* Checkboxes */
+.checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 2rem;
+  margin: 1rem 0;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.2rem;
+  width: 1.2rem;
+  background-color: #eee;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #4caf50;
+}
+
+/* Mobile adaptation */
+@media (max-width: 600px) {
+  .menu p {
+    font-size: 1rem;
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+  .shop {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+  }
+  .settings {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+  }
+  .autoc {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+  }
+  .clicker {
+    width: 120px;
+    height: 120px;
+  }
+  .clicker button {
+    font-size: 20px;
+  }
+  .modal-content {
+    padding: 1rem;
+    width: 85%;
+  }
+  .modal-btn {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  .modal-section h3 {
+    font-size: 1.1rem;
+  }
+  .modal-close {
+    font-size: 1rem;
+  }
+  .checkbox-container {
+    font-size: 1rem;
+    padding-left: 1.8rem;
+    margin: 0.8rem 0;
+  }
+  .checkmark {
+    height: 1rem;
+    width: 1rem;
+  }
+}
